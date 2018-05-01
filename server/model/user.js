@@ -108,26 +108,25 @@ module.exports = class User
                     if (resultado.length == 1) {
                         let email = resultado[0].email;
                         let id = resultado[0].id;
-                        let query = "UPDATE user SET lat=" + user.lat + " , lng=" + user.lng + " WHERE email='"+ user.email + "';";
-                        return new Promise((resolve, reject) => {
-                            connection.query(query, (error, resultado, campos) => {
-                                if (error) {
-                                    response = {
-                                        ok: false,
-                                        errorMessage: 'Error updating location, ' + error
-                                    };
-                                    reject(response);
-                                }
-                                else {
-                                    response = {
-                                        ok: true,
-                                        token: this.generateToken(user.email, id)
-                                    };
-                                    resolve(response);
-                                }
-                            });
-                        }).catch((error) => {
-                            reject(error);
+
+                        return new Promise((resolve2, reject) => {
+                            connection.query("UPDATE user SET lat=" + user.lat + " , lng=" + user.lng + " WHERE email='" + email + "' ;",
+                                (error, resultado, campos) => {
+                                    if (error) {
+                                        response = {
+                                            ok: false,
+                                            errorMessage: 'Error updating location, ' + error
+                                        };
+                                        reject(response);
+                                    }
+                                    else {
+                                        response = {
+                                            ok: true,
+                                            token: this.generateToken(email, id)
+                                        };
+                                        resolve(response);
+                                    }
+                                });
                         });
                     }
                     else {
@@ -147,7 +146,7 @@ module.exports = class User
     static updateLocation(email, newLat, newLng) {
         let response;
         return new Promise((resolve, reject) => {
-            connection.query("UPDATE user SET lat=" + newLat + " , lng=" + newLng + " WHERE email='"+ email + "';"),
+            connection.query("UPDATE user SET lat=" + newLat + " , lng=" + newLng + " WHERE email='" + email + "' ;",
                 (error, resultado, campos) => {
                     if (error) {
                         response = {
@@ -165,7 +164,7 @@ module.exports = class User
                         };
                         resolve(response);
                     }
-                }
+                });
         });
     }
 
