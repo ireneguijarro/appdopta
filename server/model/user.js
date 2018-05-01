@@ -108,9 +108,9 @@ module.exports = class User
                     if (resultado.length == 1) {
                         let email = resultado[0].email;
                         let id = resultado[0].id;
+                        let query = "UPDATE user SET lat=" + user.lat + " , lng=" + user.lng + " WHERE email='"+ user.email + "';";
                         return new Promise((resolve, reject) => {
-                            connection.query("UPDATE user SET lat=" + user.lat + " , lng=" + user.lng + " WHERE email='"+ user.email + "';"),
-                                (error, resultado, campos) => {
+                            connection.query(query, (error, resultado, campos) => {
                                 if (error) {
                                     response = {
                                         ok: false,
@@ -125,10 +125,10 @@ module.exports = class User
                                     };
                                     resolve(response);
                                 }
-                            }
+                            });
                         }).catch((error) => {
-                            console.log(error);
-                        })
+                            reject(error);
+                        });
                     }
                     else {
                         response = {
@@ -138,10 +138,10 @@ module.exports = class User
                         reject(response);
                     }
                 }
-            })
+            });
         }).catch((error) => {
             reject(error);
-        })
+        });
     }
 
     static updateLocation(email, newLat, newLng) {
