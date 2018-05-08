@@ -94,10 +94,11 @@ module.exports = class User
         let response;
         let encryptedPassword = md5(user.password);
         let query = "SELECT * FROM user WHERE email = '" + user.email + "' AND password = '" + encryptedPassword + "';";
-
+        
         return new Promise((resolve, reject) => {
             connection.query(query, (error, resultado, campos) => {
                 if (error) {
+                    console.log(error);
                     response = {
                         ok: false,
                         errorMessage: 'Error validating user, ' + error
